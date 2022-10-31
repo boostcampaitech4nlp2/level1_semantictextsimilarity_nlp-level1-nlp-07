@@ -60,6 +60,7 @@ class Dataloader(pl.LightningDataModule):
         # print("이상한 특수기호 변형")
         # pattern = '[^\w\s]'
         # text = re.sub(pattern=pattern, repl='.', string=text)
+        # print("특수 기호 통일")
         return text
 
     # 문자열에서 인접한 중복 문자를 제거하는 기능
@@ -81,16 +82,6 @@ class Dataloader(pl.LightningDataModule):
         # print("URL 제거 : ", text , "\n")
         pattern = "([ㄱ-ㅎㅏ-ㅣ]+)"
         text = re.sub(pattern=pattern, repl="", string=text)
-        # print("한글 자음 모음 제거 : ", text , "\n")
-        # pattern = '<[^>]*>'
-        # text = re.sub(pattern=pattern, repl='', string=text)
-        # print("태그 제거 : " , text , "\n")
-        # pattern = r'\([^)]*\)'
-        # text = re.sub(pattern=pattern, repl='', string=text)
-        # print("괄호와 괄호안 글자 제거 :  " , text , "\n")
-        # pattern = '[^\w\s]'
-        # text = re.sub(pattern=pattern, repl='', string=text)
-        # print("특수기호 제거 : ", text , "\n" )
         text = text.strip()
         # print("양 끝 공백 제거 : ", text , "\n" )
         text = " ".join(text.split())
