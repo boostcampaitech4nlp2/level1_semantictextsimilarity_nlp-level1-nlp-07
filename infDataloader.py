@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 
 import re
 
-from infDataset import Dataset
+from Dataset import Dataset
 
 class Dataloader(pl.LightningDataModule):
     def __init__(
