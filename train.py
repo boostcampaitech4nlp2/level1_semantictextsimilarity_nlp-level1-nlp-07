@@ -10,8 +10,6 @@ from Dataloader import Dataloader
 from Model import Model
 
 
-
-
 def train(config, entity=None, project_name=None, wandb_check=True):
 
     # dataloader와 model을 생성합니다.
@@ -26,7 +24,7 @@ def train(config, entity=None, project_name=None, wandb_check=True):
     )
     model = Model(
         model_name=config["model_name"],
-        lr=config["learning_rate"],
+        lr = config["learning_rate"],
         step_size=config["step_size"],
         gamma=config["gamma"],
     )

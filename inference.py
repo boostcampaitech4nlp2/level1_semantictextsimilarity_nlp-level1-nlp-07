@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 import pytorch_lightning as pl
 
-from infModel import Model
+from Model import Model
 from DataLoader import DataLoader
 
 
@@ -28,7 +28,10 @@ if __name__ == "__main__":
         train_config["predict_path"],
     )
 
-    model = Model(train_config["model_name"], train_config["learning_rate"])
+    model = Model(
+            model_name = train_config["model_name"], 
+            lr = train_config["learning_rate"]
+        )
 
     # gpu가 없으면 'gpus=0'을, gpu가 여러개면 'gpus=4'처럼 사용하실 gpu의 개수를 입력해주세요
     checkpoint_path = f"checkpoint/{project_name}/batch64_epoch5_lr1e-05/epoch=03-val_pearson=0.92.ckpt"

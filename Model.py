@@ -8,7 +8,12 @@ import torchmetrics
 import pytorch_lightning as pl
 
 class Model(pl.LightningModule):
-    def __init__(self, model_name, lr, step_size=None, gamma=None):
+    def __init__(
+        self, 
+        model_name,
+        lr,
+        step_size=None, 
+        gamma=None):
         super().__init__()
         self.save_hyperparameters()
 
@@ -55,6 +60,10 @@ class Model(pl.LightningModule):
 
     def validation_epoch_end(self, outputs):
         global epoch_num
+        global global_batch_size
+        global global_max_epoch
+        global global_learning_rate
+
         val_pearson = [x["val_pearson"] for x in outputs]
         dev_pred = [x["logits"].squeeze() for x in outputs]
         # print("처리 전 : ", dev_pred)
