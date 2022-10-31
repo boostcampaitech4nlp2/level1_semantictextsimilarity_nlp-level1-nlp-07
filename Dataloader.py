@@ -73,7 +73,7 @@ class Dataloader(pl.LightningDataModule):
                 prev = c
         return "".join(chars)
 
-    def cleanText(self, text):
+    def deleteStopword(self, text):
         # pattern = '([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)'
         # text = re.sub(pattern=pattern, repl='', string=text)
         # print("E-mail제거 : " , text , "\n")
@@ -88,29 +88,35 @@ class Dataloader(pl.LightningDataModule):
         # print("중간에 공백은 1개만 : ", text )
         return text
 
+    def cleanText(self, text):
+        # 특수 문자 처리
+        if self.del_special_symbol is True:
+            text = self.replaceSpecialSymbol(text)
+
+        # 불용어 처리를 진행합니다.
+        if self.del_stopword is True:
+            text = self.replaceSpecialSymbol(text)
+
+        # 반복되는 문자 제거
+        if self.del_dup_char is True:
+            text = self.replaceSpecialSymbol(text)
+
+        return text
+      
+
     def tokenizing(self, dataframe):
         data = []
         for idx, item in tqdm(
             dataframe.iterrows(), desc="tokenizing", total=len(dataframe)
         ):
-            # 특수 문자 처리
-            if self.del_special_symbol is True:
-                item["sentence_1"] = self.replaceSpecialSymbol(item["sentence_1"])
-                item["sentence_2"] = self.replaceSpecialSymbol(item["sentence_2"])
+            # 텍스트 정규화
+            clean_sentence_1 = self.cleanText(item["sentence_1"])
+            clean_sentence_2 = self.cleanText(item["sentence_2"])
 
-            # 불용어 처리를 진행합니다.
-            if self.del_stopword is True:
-                item["sentence_1"] = self.cleanText(item["sentence_1"])
-                item["sentence_2"] = self.cleanText(item["sentence_2"])
-
-            # 반복되는 문자 제거
-            if self.del_dup_char is True:
-                item["sentence_1"] = self.removeDuplicates(item["sentence_1"])
-                item["sentence_2"] = self.removeDuplicates(item["sentence_2"])
-
+            # 토큰화
             outputs = self.tokenizer(
-                item["sentence_1"],
-                item["sentence_2"],
+                clean_sentence_1,
+                clean_sentence_2,
                 add_special_tokens=True,
                 padding="max_length",
                 truncation=True,
