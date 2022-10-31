@@ -11,14 +11,22 @@ class Model(pl.LightningModule):
     def __init__(
         self, 
         model_name,
-        lr,
+        batch_size,
+        max_epoch,
+        learning_rate,
         step_size=None, 
         gamma=None):
         super().__init__()
         self.save_hyperparameters()
 
         self.model_name = model_name
-        self.lr = lr
+
+        self.epoch_num = 0
+
+        self.batch_size = batch_size
+        self.max_epoch = max_epoch
+        self.learning_rate = learning_rate
+
         self.step_size = step_size
         self.gamma = gamma
         # 사용할 모델을 호출합니다.
@@ -59,11 +67,6 @@ class Model(pl.LightningModule):
         return {"logits": logits, "val_pearson": val_pearson}
 
     def validation_epoch_end(self, outputs):
-        global epoch_num
-        global global_batch_size
-        global global_max_epoch
-        global global_learning_rate
-
         val_pearson = [x["val_pearson"] for x in outputs]
         dev_pred = [x["logits"].squeeze() for x in outputs]
         # print("처리 전 : ", dev_pred)
@@ -85,11 +88,11 @@ class Model(pl.LightningModule):
             plt.ylabel("Pred")
 
             plt.savefig(
-                f"batch:{global_batch_size},epoch:{global_max_epoch},lr:{global_learning_rate}, epoch:{epoch_num}.png",
+                f"batch:{self.batch_size},epoch:{self.max_epoch},lr:{self.learning_rate}, epoch:{self.epoch_num}.png",
                 dpi=200,
             )
             plt.clf()  # 그래프를 겹쳐서 보고 싶으면 주석처리함
-            epoch_num += 1
+            self.epoch_num += 1
 
     def test_step(self, batch, batch_idx):
         x, y = batch
@@ -107,7 +110,7 @@ class Model(pl.LightningModule):
         return logits.squeeze()
 
     def configure_optimizers(self):
-        optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.learning_rate)
 
         if self.step_size and self.gamma:
             scheduler = StepLR(optimizer, self.step_size, self.gamma)

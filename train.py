@@ -10,6 +10,8 @@ from Dataloader import Dataloader
 from Model import Model
 
 
+
+
 def train(config, entity=None, project_name=None, wandb_check=True):
 
     # dataloader와 model을 생성합니다.
@@ -24,7 +26,9 @@ def train(config, entity=None, project_name=None, wandb_check=True):
     )
     model = Model(
         model_name=config["model_name"],
-        lr = config["learning_rate"],
+        batch_size = config["batch_size"], 
+        max_epoch = config["max_epoch"], 
+        learning_rate = config["learning_rate"],
         step_size=config["step_size"],
         gamma=config["gamma"],
     )
@@ -66,7 +70,7 @@ def train(config, entity=None, project_name=None, wandb_check=True):
 
 
 if __name__ == "__main__":
-    epoch_num = 0
+    # epoch_num = 0
 
     # 하이퍼 파라미터 등 각종 설정값을 입력받습니다
     with open("config.json", "r") as f:
@@ -76,11 +80,8 @@ if __name__ == "__main__":
     entity = "naver-nlp-07"
     save_top_k = 5
 
-    global global_batch_size
     global_batch_size = train_config["batch_size"]
-    global global_max_epoch
     global_max_epoch = train_config["max_epoch"]
-    global global_learning_rate
     global_learning_rate = train_config["learning_rate"]
 
     if train_config["with_wandb"]:
@@ -107,6 +108,8 @@ if __name__ == "__main__":
                 )
                 model = Model(
                     train_config["model_name"],
+                    config.batch_size,
+                    train_config["max_epoch"],
                     config.learning_rate,
                     config.step_size,
                     config.gamma,

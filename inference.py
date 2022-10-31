@@ -29,9 +29,11 @@ if __name__ == "__main__":
     )
 
     model = Model(
-            model_name = train_config["model_name"], 
-            lr = train_config["learning_rate"]
-        )
+        model_name = train_config["model_name"], 
+        batch_size = train_config["batch_size"], 
+        max_epoch = train_config["max_epoch"], 
+        learning_rate = train_config["learning_rate"],
+    )
 
     # gpu가 없으면 'gpus=0'을, gpu가 여러개면 'gpus=4'처럼 사용하실 gpu의 개수를 입력해주세요
     checkpoint_path = f"checkpoint/{project_name}/batch64_epoch5_lr1e-05/epoch=03-val_pearson=0.92.ckpt"
