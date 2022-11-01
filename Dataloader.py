@@ -11,7 +11,6 @@ import re
 
 from Dataset import Dataset
 
-
 class Dataloader(pl.LightningDataModule):
     def __init__(
         self,

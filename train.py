@@ -70,8 +70,6 @@ def train(config, entity=None, project_name=None, wandb_check=True):
 
 
 if __name__ == "__main__":
-    # epoch_num = 0
-
     # 하이퍼 파라미터 등 각종 설정값을 입력받습니다
     with open("config.json", "r") as f:
         train_config = json.load(f)
@@ -79,10 +77,6 @@ if __name__ == "__main__":
     project_name = train_config["model_name"].split("/")[-1]
     entity = "naver-nlp-07"
     save_top_k = 5
-
-    global_batch_size = train_config["batch_size"]
-    global_max_epoch = train_config["max_epoch"]
-    global_learning_rate = train_config["learning_rate"]
 
     if train_config["with_wandb"]:
         wandb.login(key=train_config["key"])  ##insert key
