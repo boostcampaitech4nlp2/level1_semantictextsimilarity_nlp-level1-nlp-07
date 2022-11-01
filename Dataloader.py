@@ -39,8 +39,8 @@ class Dataloader(pl.LightningDataModule):
 
         # preprocessing options
         self.del_special_symbol = True
-        self.del_stopword = True
-        self.del_dup_char = True
+        self.del_stopword = False
+        self.del_dup_char = False
 
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             model_name, model_max_length=256
