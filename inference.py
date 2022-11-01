@@ -7,7 +7,7 @@ import torch
 import pytorch_lightning as pl
 
 from Model import Model
-from DataLoader import DataLoader
+from Dataloader import Dataloader
 
 
 if __name__ == "__main__":
